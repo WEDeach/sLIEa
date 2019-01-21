@@ -1,4 +1,4 @@
-for sLIEa import SINoALICE
+from sLIEa import SINoALICE
 uuid = "YOUR UUID"
 client = SINoALICE(uuid, """
 LOGIN ENCRYPT DATA
@@ -14,3 +14,5 @@ print('魔晶石: ', client.userData['freeCurrentCoin'])
 print('魔晶石(付費): ', client.userData['currentCoin'])
 print('上次登入時間: ', client.userData['recentLoginTime'])
 print('-----------------------')
+
+input('點擊任意鍵...')
