@@ -948,7 +948,85 @@ class Gacha(object):
                 return res['payload']
         return []
 
-class API(User, Chat, Mission, Present, Clean, Quest, Gacha):
+class Guild(object):
+    def __init__(self):
+        pass
+    
+    @loggedIn
+    def recommendGuildSearch(self, mstId):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/recommend_guild_search'
+        hr = {
+            'Content-Type': 'application/x-msgpack'
+        }
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                '''
+                "guildDataId": 9908,
+                "guildName": "未隸屬公會",
+                "guildIdentifierId": "nw44u6",
+                "guildDescription": "**現在只招收綜合值75000以上的新成員，不符合資格的新成員會被即時解除**",
+                "guildMasterUserId": 1000989295,
+                "maxMember": 15,
+                "joinMember": 14,
+                "guildExp": 5055127,
+                "guildLevel": 38,
+                "guildRank": 4,
+                "guildPoint": 5055127,
+                "gvgWin": 26,
+                "gvgLose": 11,
+                "gvgDraw": 0,
+                "gvgTimeType": 128,
+                "beforeGvgTimeType": 0,
+                "isAutoAccept": true,
+                "autoExpulsionType": 0,
+                "isGvgPushCall": false,
+                "gvgPushCallComment": "是時候出場了！！",
+                "currentGuildTitleMstId": 0,
+                "subscriptionPowerType": 8,
+                "subscriptionGvgJoinType": 2,
+                "subscriptionActionType": 15,
+                "subscriptionStyleType": 3,
+                "subscriptionComment": null
+                '''
+                return res['payload']['guildDataList']
+        return []
+        
+    @loggedIn
+    def createGuild(self, guildName, guildDescription):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/create_guild'
+        hr = {
+            'Content-Type': 'application/x-msgpack'
+        }
+        np = self.server.addPayload({
+            "guildName": guildName,
+            "guildDescription": guildDescription
+        })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res and res['payload'].get('guildDataId') != None:
+                return res['payload']['guildDataId']
+        return False
+        
+    @loggedIn
+    def guildData(self):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/create_guild'
+        hr = {
+            'Content-Type': 'application/x-msgpack'
+        }
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return False
+
+class API(User, Chat, Mission, Present, Clean, Quest, Gacha, Guild):
     def __init__(self):
         User.__init__(self)
         Chat.__init__(self)
@@ -957,3 +1035,5 @@ class API(User, Chat, Mission, Present, Clean, Quest, Gacha):
         Clean.__init__(self)
         Quest.__init__(self)
         Gacha.__init__(self)
+        #Mst.__init__(self)
+        Guild.__init__(self)

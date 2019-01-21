@@ -1,4 +1,4 @@
-import sLIEa
+for sLIEa import SINoALICE
 uuid = "YOUR UUID"
 client = SINoALICE(uuid, """
 LOGIN ENCRYPT DATA
