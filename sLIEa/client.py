@@ -30,7 +30,10 @@ class SINoALICE(API, Models):
         self.deckDataList = []
         self.jobDataList = []
         self.costumeDataList = []
-        self.InGameChat = None  #Do it...
+        self.InGameChat = {
+            'roomId': None,
+            'room_id': None
+        }
         self.mpInfo = self.getMyPageInfo()
         self.newMessageList = self.mpInfo['newMessageList']
         self.connection = {}
