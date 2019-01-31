@@ -843,8 +843,12 @@ class Quest(object):
         return []
 
     @loggedIn
-    def changeAiMode(self, isAi=0):
-        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/quest_battle/change_ai_mode'
+    def changeAiMode(self, isAi=0, mode='quest_battle'):
+        #mode : quest_battle or gvg
+        if mode in ['quest_battle', 'gvg']:
+            url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/%s/change_ai_mode' % mode
+        else:
+            return False
         hr = self.server.addHeaders({
             'Content-Type': 'application/x-msgpack'
         })
@@ -910,6 +914,34 @@ class Quest(object):
                 #res['payload']['success'] == True else res['payload']['message']
                 self.userData = res['payload']['userData']
                 return res['payload']
+        return []
+
+    """ GvG """
+
+    @loggedIn
+    def getGvgInfo(self):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gvg/get_info'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            return res['payload']
+        return []
+        
+    @loggedIn
+    def getGvgViewParams(self):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gvg_out_battle/get_gvg_view_params'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            return res['payload']
         return []
 
 class Gacha(object):
