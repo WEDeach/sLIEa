@@ -927,6 +927,54 @@ class Gacha(object):
         if r.status_code == 200:
             res = self.server.unpackData(r.content)
             if res['payload']:
+                return res['payload']['gachaList']
+        return []
+
+    @loggedIn
+    def getGuildGachaTop(self):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gacha/get_guild_gacha_top'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return []
+
+    @loggedIn
+    def getGuildGachaRewardList(self, guildGachaMstId):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gacha/get_guild_gacha_reward_list'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        np = self.server.addPayload({
+            "guildGachaMstId": guildGachaMstId
+        })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return []
+
+    @loggedIn
+    def execGuildGacha(self, guildGachaMstId):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gacha/guild_gacha_exec'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        np = self.server.addPayload({
+            "guildGachaMstId": guildGachaMstId
+        })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
                 return res['payload']
         return []
 

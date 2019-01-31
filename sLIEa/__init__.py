@@ -1,7 +1,7 @@
 from .client import SINoALICE
 
 __copyright__       = 'Copyright 2019 by YinMo.'
-__version__         = '1.0.2'
+__version__         = '1.0.3'
 __license__         = 'BSD-3-Clause'
 __author__          = 'YinMo'
 
