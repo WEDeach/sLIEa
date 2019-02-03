@@ -19,7 +19,7 @@ class User(object):
     def __init__(self):
         pass
 
-    def userLogin(self,uuid , encryptedData):
+    def userLogin(self,encryptedData, uuid):
         url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/alice_login'
         hr = self.server.addHeaders({
             'Content-Type': 'application/x-msgpack'

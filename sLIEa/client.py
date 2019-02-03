@@ -14,8 +14,12 @@ class SINoALICE(API, Models):
             'X-Unity-Version': '5.4.4f1'
         })
         if encryptedData is not None:
-            self.userLogin(uuid, encryptedData)
-        self.__initAll()
+            if uuid is None:
+                print('[!]You need to get Uuid, you can capture it from the URL in other requests.')
+                #Even if I use the wrong uuid, the server still accepts my request
+            else:
+                self.userLogin(encryptedData, uuid)
+                self.__initAll()
 
     def __initAll(self):
         Models.__init__(self)
