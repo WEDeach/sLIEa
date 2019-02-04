@@ -1,8 +1,8 @@
 from sLIEa import SINoALICE
 uuid = "YOUR UUID"
-client = SINoALICE(uuid, """
+client = SINoALICE("""
 LOGIN ENCRYPT DATA
-""")
+""", uuid)
 
 if client.mpInfo['presentNum'] > 0:
     print('共有%s件禮物...即將自動領取...'%client.mpInfo['presentNum'])
