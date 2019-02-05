@@ -500,7 +500,7 @@ class Clean(object):
         return []
         
     @loggedIn
-    def CleaningRetire(self):
+    def cleaningRetire(self):
         url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/cleaning/retire'
         hr = self.server.addHeaders({
             'Content-Type': 'application/x-msgpack'
@@ -550,6 +550,7 @@ class Clean(object):
         if r.status_code == 200:
             res = self.server.unpackData(r.content)
             if not res:
+                self.cleaningRetire()
                 raise Exception("EndCleaning Failed!")
             elif 'payload' in res:
                 self.userData = res["payload"]["userData"]
