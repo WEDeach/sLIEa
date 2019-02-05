@@ -78,12 +78,14 @@ class Server(Config):
             if act:
                 self.CalRequestId(msg['requestid'])
             if 'errors' in msg:
-                if msg['errors'][0]['code'] == 2002:
+                if msg['errors'][0]['code'] == 1009:
+                    return False
+                elif msg['errors'][0]['code'] == 2002:
                     self.isLogin = False
                 elif msg['errors'][0]['code'] == 20002:
                     self.isLogin = False
-                print(msg['errors'][0]['reason'])
-                return False
+                print(msg['errors'][0]['code'],':',msg['errors'][0]['reason'])
+                return {}
             else:
                 if 'payload' not in msg:
                     print('not found payload:', msg)

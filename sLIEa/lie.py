@@ -549,7 +549,9 @@ class Clean(object):
         r = self.server.postContent(url, headers=hr, data=data)
         if r.status_code == 200:
             res = self.server.unpackData(r.content)
-            if res['payload']:
+            if not res:
+                raise Exception("EndCleaning Failed!")
+            elif 'payload' in res:
                 self.userData = res["payload"]["userData"]
                 return res['payload']
         return []
