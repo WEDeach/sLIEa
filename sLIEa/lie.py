@@ -1096,12 +1096,73 @@ class Guild(object):
         return False
         
     @loggedIn
+    def getGuildMemberList(self, guildDataId):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/guild_member_list'
+        np = self.server.addPayload({
+            "guildDataId": guildDataId
+        })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return False
+        
+    @loggedIn
+    def removeGuildMember_(self, guildDataId, removeUserId):
+        #Need permission
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/guild_member_remove'
+        np = self.server.addPayload({
+            "guildDataId": guildDataId,
+            "removeUserId": removeUserId
+        })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return False
+        
+        
+        
+    @loggedIn
     def guildData(self):
-        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/create_guild'
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/guild/guild_data'
         hr = {
             'Content-Type': 'application/x-msgpack'
         }
         data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return False
+        
+    @loggedIn
+    def getGvgEventData(self):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gvg_event/get_gvg_event_data'
+        hr = {
+            'Content-Type': 'application/x-msgpack'
+        }
+        data = msgpack.packb(self.server.payloads)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            res = self.server.unpackData(r.content)
+            if 'payload' in res:
+                return res['payload']
+        return False
+        
+    @loggedIn
+    def applyEntryGvgEvent(self, entryStatus=1):
+        #大公會戰 需公會作成者或副會長!!
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/gvg_event/apply_entry_gvg_event'
+        np = self.server.addPayload({
+            "entryStatus": entryStatus
+        })
+        data = msgpack.packb(np)
         r = self.server.postContent(url, headers=hr, data=data)
         if r.status_code == 200:
             res = self.server.unpackData(r.content)
