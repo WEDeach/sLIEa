@@ -19,11 +19,23 @@ class User(object):
     def __init__(self):
         pass
 
-    def userLogin(self,encryptedData, uuid):
+    def userLogin(self, encryptedData, uuid, loginVer='10.0.7'):
         url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/alice_login'
         hr = self.server.addHeaders({
             'Content-Type': 'application/x-msgpack'
         })
+        try:
+            if type(encryptedData) == str:
+                encryptedData = encryptedData.encode()
+            data = self.server.unpackData(encryptedData, False, True)
+            if 'payload' in data:
+                print('[INFO]目前的遊戲版本: ', data['payload']['appVersion'])
+                if data['payload']['appVersion'] != loginVer:
+                    data['payload']['appVersion'] = loginVer
+                    encryptedData = msgpack.packb(data, use_bin_type=True)
+                    print('[INFO]已自動更新遊戲版本至 ', data['payload']['appVersion'])
+        except:
+            print('[INFO] 無法獲取您的遊戲版本...你可能需要重新獲取你的加密認證數據')
         r = self.server.postContent(url, headers=hr, data=encryptedData)
         if r.status_code == 200:
             msg = self.server.unpackData(r.content)
@@ -34,10 +46,12 @@ class User(object):
             self.server.payloads['sessionId'] = msg['payload']['sessionId']
             self.server.payloads['actionTime'] = self.ToFileTimeUtc()
             self.isLogin = True
+            self.config = self.getConfig()
             print('登入成功')
             return True
-        print('Login failed!')
-        return False
+        elif r.status_code == 428:
+            raise Exception('[ERROR] 遊戲版本過舊, 請自行更改 loginVer 後再重試一次')
+        raise Exception('[ERROR] 登入失敗!')
 
     @loggedIn
     def getUserData(self, userId=None):
@@ -268,6 +282,63 @@ class User(object):
             if msg['payload']['success']:
                 self.userData = msg['payload']['userData']
             return msg['payload']
+        return False
+
+    @loggedIn
+    def cardLimitBreak(self, baseCardDataId, materialDataIds):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/card_limit_break/limit_break'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        np = self.server.addPayload({
+            'baseCardDataId': baseCardDataId,
+            "materialDataIds": materialDataIds
+          })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            msg = self.server.unpackData(r.content)
+            if 'payload' in msg:
+                if msg['payload']['success']:
+                    return msg['payload']
+        return False
+
+    @loggedIn
+    def cardMerget(self, baseCardDataId, materialDataIds):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/card_merge/merge'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        np = self.server.addPayload({
+            'baseCardDataId': baseCardDataId,
+            "materialDataIds": materialDataIds
+          })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            msg = self.server.unpackData(r.content)
+            if 'payload' in msg:
+                if msg['payload']['success']:
+                    return msg['payload']
+        return False
+
+    @loggedIn
+    def preMerget(self, baseCardDataId, materialDataIds):
+        url = 'https://l13-prod-all-gs-user-ualice-tw.komoejoy.com/api/card_merge/pre_merge'
+        hr = self.server.addHeaders({
+            'Content-Type': 'application/x-msgpack'
+        })
+        np = self.server.addPayload({
+            'baseCardDataId': baseCardDataId,
+            "materialDataIds": materialDataIds
+          })
+        data = msgpack.packb(np)
+        r = self.server.postContent(url, headers=hr, data=data)
+        if r.status_code == 200:
+            msg = self.server.unpackData(r.content)
+            if 'payload' in msg:
+                if msg['payload']['canMerge']:
+                    return msg['payload']
         return False
 
 class Mission(object):

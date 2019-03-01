@@ -6,11 +6,11 @@ from .models import Models
 class SINoALICE(API, Models):
     isLogin = False
     
-    def __init__(self, uuid, encryptedData=None):
+    def __init__(self, encryptedData, uuid=None, loginVer=None):
         self.server = Server()
         API.__init__(self)
         self.server.setHeadersWithDict({
-            'User-Agent': 'UnityRequest com.komoe.sinoalicegoogle 10.0.5 (LGE LGM-V300K Android OS 5.1.1 / API-22 (N2G47H/500190101))',
+            'User-Agent': 'UnityRequest com.komoe.sinoalicegoogle 10.0.7 (LGE LGM-V300K Android OS 5.1.1 / API-22 (N2G47H/500190101))',
             'X-Unity-Version': '5.4.4f1'
         })
         if encryptedData is not None:
@@ -18,7 +18,10 @@ class SINoALICE(API, Models):
                 print('[!]You need to get Uuid, you can capture it from the URL in other requests.')
                 #Even if I use the wrong uuid, the server still accepts my request
             else:
-                self.userLogin(encryptedData, uuid)
+                if loginVer != None:
+                    self.userLogin(encryptedData, uuid, loginVer)
+                else:
+                    self.userLogin(encryptedData, uuid)
                 self.__initAll()
 
     def __initAll(self):

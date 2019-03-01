@@ -78,8 +78,14 @@ class Server(Config):
             if act:
                 self.CalRequestId(msg['requestid'])
             if 'errors' in msg:
+                if 'payload' in msg:
+                    print('[ERRORLOG]', msg)
                 if msg['errors'][0]['code'] == 1009:
                     return False
+                elif msg['errors'][0]['code'] == 2000:
+                    #New version.
+                    print('[!] 版本過舊.')
+                    self.isLogin = False
                 elif msg['errors'][0]['code'] == 2002:
                     self.isLogin = False
                 elif msg['errors'][0]['code'] == 20002:
@@ -90,31 +96,8 @@ class Server(Config):
                 if 'payload' not in msg:
                     print('not found payload:', msg)
             return msg
+        elif msg['status'] == 428:
+            print('[!] 版本過舊.')
         else:
             print(msg)
             return False
-            
-    def SetupSocket(self, reflectorType, reflectorServerId, roomId):
-        print("#SetupSocket start. roomId:" + roomId)
-        reflectorUrl = ''
-        #connection_url = '/march'
-        #/json/quest_battle/
-        
-    def EmitServer(self, roomId, redirectUrl, payload):
-        #if self.socket != None:
-		# jsonData = {}
-        # jsonData["request_timestamp"] = time.time()
-		# jsonData["uuid"] = self.uuid
-		# jsonData["room_id"] = roomId
-		# jsonData["payload"] = payload
-		# jsonData2 = {}
-        # jsonData["Accept"] = "application/json"
-		# jsonData["Uuid"] = self.uuid
-		# if (str(payload) != '')
-		# {
-			# jsonData2["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8";
-		# }
-		# jsonData["custom_headers"] = jsonData2;
-		# jsonData["redirect_url"] = redirectUrl;
-		# EmitByType(EmitType.server, jsonData);
-        pass

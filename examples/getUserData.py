@@ -1,8 +1,8 @@
 from sLIEa import SINoALICE
 uuid = "YOUR UUID"
-client = SINoALICE("""
-LOGIN ENCRYPT DATA
-""", uuid)
+gameVer = '10.0.7'
+client = SINoALICE(b"LOGIN ENCRYPT DATA", uuid, gameVer)
+# client = SINoALICE("""LOGIN ENCRYPT DATA""", uuid)
 
 print('-----------------------')
 print('名稱: ', client.userData['name'])
