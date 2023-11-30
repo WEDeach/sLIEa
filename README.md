@@ -6,6 +6,24 @@
 
 ----
 
+## 2023 What'up
+本庫一開始為公開的, 並在巴哈上有日誌參考:
+- [我居然做了死亡愛麗絲(SINoALICE)的BOT...](https://home.gamer.com.tw/creationDetail.php?sn=4261795)
+- [第二隻BOT的等級很母湯... - SINoALICE 死亡愛麗絲](https://home.gamer.com.tw/creationDetail.php?sn=4266277)
+- [對於戰鬥&聊天系統的進步... - 死亡愛麗絲 SINoALICE](https://home.gamer.com.tw/creationDetail.php?sn=4272984)
+
+簡單來說本庫是為了繁中伺服器(TW ver.)而做, 而其目的是為了學習:
+- 了解遊戲架構與服務請求
+- 遊戲機制與資料解析
+- 遊戲副本連線運作機制(Socketio)
+
+請求都以MsgPack做壓縮, 這是我第一次接觸msgpack, 在這五年來陸續接觸了5-6款遊戲也都是以magpack做壓縮, 這也包括了我目前正在製作的[D4DJ API](https://www.patreon.com/posts/d4dj-database-74413927?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link)
+
+總體來說本庫對我收益頗大, 如今台服已經停止營運, 我又再次公開此庫給其他人研究
+本庫端點均為**TW Only**, 在2024我還打算公開目前我還正在使用的[sLIEa_GW](https://github.com/WEDeach/sLIEa_GW)
+
+台服與日服最大差異在於**沒有請求加密**, 只有簡單的MD5去做請求處理
+
 ## Requirement
 
 The linepy module only requires Python 3. You can download from [here](https://www.python.org/downloads/). 
